@@ -17,7 +17,7 @@ def signup():
             flash('Logged in successfully!', category='success')
             return redirect(request.args.get('next') or url_for('summary'))
         flash('Wrong username or password!', category='error')
-    return render_template('signup.html', title='auth', form=form)
+    return render_template('signup.html', title='Sign up', form=form)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -30,4 +30,4 @@ def login():
             flash('Logged in successfully!', category='success')
             return redirect(request.args.get('next') or url_for('summary'))
         flash('Wrong username or password!', category='error')
-    return render_template('login.html', title='auth', form=form)
+    return render_template('login.html', title='Log in', form=form)
