@@ -1,8 +1,10 @@
 from app import app, lm
 from flask import request, redirect, render_template, url_for, flash, Blueprint, session
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user
+
 from app.forms import SignupForm, LoginForm
 from app.models import User
+from app.utils import flash_form_errors
 
 auth = Blueprint('auth', __name__, template_folder='../static/templates')
 
@@ -27,8 +29,7 @@ def signup_post():
         else:
             flash("Username '{}' is already taken".format(form.username.data), category='error')
     else:
-        for field, field_errors in form.errors.items():
-            flash('{}: {}'.format(field, ','.join(field_errors)), category='error')
+        flash_form_errors(form)
     return render_template('signup.html', title='Sign up', form=form)
 
 
@@ -45,7 +46,7 @@ def login_post():
         if user and User.validate_login(user['password'], form.password.data):
             user_obj = User(user['name'], user['password'])
             login_user_(user_obj)
-            return redirect(request.args.get('next') or url_for('expense.home'))
+            return redirect(request.args.get('next') or url_for('site.home'))
         flash('Wrong username or password!', category='error')
     return render_template('login.html', title='Log in', form=form)
 
