@@ -18,18 +18,30 @@ def find_user_expenses(user_id, limit=None):
     return map(lambda e: Expense(**e), user_expenses)
 
 
-def insert_expense(expense, user_id):
+def insert_expense(expense):
+    expense_data = _build_expense_data(expense)
+    return app.config['EXPENSES_COLLECTION'].insert_one(expense_data)
+
+
+def update_expense(expense_id, expense):
+    expense_data = _build_expense_data(expense)
+    return app.config['EXPENSES_COLLECTION'].find_one_and_replace(
+        {'_id': ObjectId(expense_id)}, expense_data)
+
+
+def delete_expense(expense_id):
+    return app.config['EXPENSES_COLLECTION'].delete_one({'_id': ObjectId(expense_id)})
+
+
+def _build_expense_data(expense):
     expense_data = {
         'name': expense.name,
         'date': expense.date,
         'amount': expense.amount,
-        'user_id': user_id
+        'user_id': expense.user_id,
     }
-    return app.config['EXPENSES_COLLECTION'].insert_one(expense_data)
 
+    if expense._id:
+        expense_data['_id'] = expense._id
 
-def update_expense(expense):
-    pass
-
-def delete_expense(expense_id):
-    pass
+    return expense_data
