@@ -7,11 +7,13 @@ from app.models import User
 auth = Blueprint('auth', __name__, template_folder='../static/templates')
 
 
-@auth.route('/signup', methods=['GET', 'POST'])
-def signup():
+@auth.route('/signup', methods=['GET'])
+def signup_get():
+    return render_template('signup.html', title='Sign up', form=SignupForm())
+
+@auth.route('/signup', methods=['POST'])
+def signup_post():
     if request.method == 'POST':
-        import pudb
-        pudb.set_trace()
         form = SignupForm(request.form)
         if form.validate():
             username = form.username.data
@@ -27,8 +29,6 @@ def signup():
             for field, field_errors in form.errors.items():
                 flash('{}: {}'.format(field, ','.join(field_errors)), category='error')
         return render_template('signup.html', title='Sign up', form=form)
-    else:
-        return render_template('signup.html', title='Sign up', form=SignupForm())
 
 
 @auth.route('/login', methods=['GET', 'POST'])
