@@ -1,0 +1,26 @@
+{% for expense in expenses %}
+<div class="row row-vspace-30">
+    <div class="col-md-12">
+        <div class="col-md-3">
+            {{ expense.date }}
+        </div>
+        <div class="col-md-3">
+            {{ expense.name }}
+        </div>
+        <div class="col-md-3">
+            {{ expense.amount }}
+        </div>
+        <div class="col-md-3">
+            <a href="{{ url_for('expense.expense_get_edit', id_=expense._id) }}" class="btn btn-primary">Edit</a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row row-vspace-30">
+    <div class="col-md-12">
+        <p>No expenses added yet!</p>
+    </div>
+</div>
+{% endfor %}
+
+
