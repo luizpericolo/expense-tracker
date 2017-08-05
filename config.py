@@ -3,7 +3,7 @@ import os
 from pymongo import MongoClient
 
 WTF_CSRF_ENABLED = True
-SECRET_KEY = 'Put your secret key here'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 DB_NAME = 'expense_tracker'
 
 MONGO_DB_USER = os.environ.get("MONGO_DB_USER")
