@@ -5,6 +5,7 @@ from flask_login import login_user, logout_user
 from app.forms import SignupForm, LoginForm
 from app.models import User
 from app.utils import flash_form_errors
+from app.repository import find_user_by_name, insert_user, find_user
 
 auth = Blueprint('auth', __name__, template_folder='../static/templates')
 
@@ -20,11 +21,14 @@ def signup_post():
     if form.validate():
         username = form.username.data
         password = form.password.data
-        existing_user = app.config['USERS_COLLECTION'].find_one({'name': username})
+        existing_user = find_user_by_name(username)
         if existing_user is None:
             new_user = User(username, password)
-            app.config['USERS_COLLECTION'].insert({'name': new_user.username, 'password': new_user.password})
-            flash("User '{}' created successfully. Please log in!".format(form.username.data), category='success')
+            new_user = insert_user(username, password)
+            if new_user:
+                flash("User '{}' created successfully. Please log in!".format(form.username.data), category='success')
+            else:
+                flash('Error creating user', category='error')
             return redirect(url_for('auth.login_get'))
         else:
             flash("Username '{}' is already taken".format(form.username.data), category='error')
@@ -42,10 +46,9 @@ def login_get():
 def login_post():
     form = LoginForm(request.form)
     if form.validate():
-        user = app.config['USERS_COLLECTION'].find_one({'name': form.username.data})
-        if user and User.validate_login(user['password'], form.password.data):
-            user_obj = User(user['name'], user['password'])
-            login_user_(user_obj)
+        user = find_user_by_name(form.username.data)
+        if user and User.validate_login(user.password, form.password.data):
+            login_user_(user)
             return redirect(request.args.get('next') or url_for('site.home'))
         flash('Wrong username or password!', category='error')
     return render_template('login.html', title='Log in', form=form)
@@ -61,11 +64,8 @@ def logout():
 
 
 @lm.user_loader
-def load_user(username):
-    u = app.config['USERS_COLLECTION'].find_one({'name': username})
-    if not u:
-        return None
-    return User(u['name'], u['password'])
+def load_user(user_id):
+    return find_user(user_id)
 
 
 def login_user_(user):
