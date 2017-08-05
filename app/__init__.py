@@ -13,6 +13,8 @@ csrf = CSRFProtect(app)
 
 from .site.views import site
 from .auth.views import auth
+from .expense.views import expense
 
 app.register_blueprint(site)
 app.register_blueprint(auth)
+app.register_blueprint(expense)
