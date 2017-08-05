@@ -3,6 +3,15 @@
 
 <div class="container">
     <h2>Last expenses</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{category}}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     {% include "expense_table.html" %}
 </div>
 {% endblock %}

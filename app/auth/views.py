@@ -28,10 +28,10 @@ def signup_post():
             if new_user:
                 flash("User '{}' created successfully. Please log in!".format(form.username.data), category='success')
             else:
-                flash('Error creating user', category='error')
+                flash('Error creating user', category='danger')
             return redirect(url_for('auth.login_get'))
         else:
-            flash("Username '{}' is already taken".format(form.username.data), category='error')
+            flash("Username '{}' is already taken".format(form.username.data), category='danger')
     else:
         flash_form_errors(form)
     return render_template('signup.html', title='Sign up', form=form)
@@ -50,7 +50,7 @@ def login_post():
         if user and User.validate_login(user.password, form.password.data):
             login_user_(user)
             return redirect(request.args.get('next') or url_for('site.home'))
-        flash('Wrong username or password!', category='error')
+        flash('Wrong username or password!', category='danger')
     return render_template('login.html', title='Log in', form=form)
 
 
