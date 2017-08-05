@@ -12,8 +12,6 @@ def find_expense(expense_id):
 
 
 def find_user_expenses(user_id, limit=None):
-    import pudb
-    pudb.set_trace()
     user_expenses = app.config['EXPENSES_COLLECTION'].find({'user_id': user_id})
     if limit:
         user_expenses = user_expenses.limit(limit)

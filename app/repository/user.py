@@ -12,8 +12,6 @@ def find_user(user_id):
     return None
 
 def find_user_by_name(username):
-    import pudb
-    pudb.set_trace()
     user_data = app.config['USERS_COLLECTION'].find_one({'username': username})
     if user_data:
         return User(user_data.get('username'), password=user_data.get('password'), _id=user_data.get('_id'))
