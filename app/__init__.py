@@ -9,5 +9,7 @@ lm.init_app(app)
 lm.login_view = 'login_'
 
 from .site.views import site
+from .auth.views import auth
 
 app.register_blueprint(site)
+app.register_blueprint(auth)
