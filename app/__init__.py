@@ -6,6 +6,8 @@ app.config.from_object('config')
 
 lm = LoginManager()
 lm.init_app(app)
-lm.login_view = 'login'
+lm.login_view = 'login_'
 
-from app import views
+from .site.views import site
+
+app.register_blueprint(site)
