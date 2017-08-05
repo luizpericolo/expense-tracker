@@ -7,7 +7,8 @@ app.config.from_object('config')
 
 lm = LoginManager()
 lm.init_app(app)
-lm.login_view = 'login_get'
+lm.id_attribute = 'id'
+lm.login_view = 'auth.login_get'
 
 csrf = CSRFProtect(app)
 
