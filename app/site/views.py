@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, session, redirect, url_for
 
-site = Blueprint('expense', __name__, template_folder='../static/templates')
+site = Blueprint('site', __name__, template_folder='../static/templates')
 
 
 @site.route('/')
