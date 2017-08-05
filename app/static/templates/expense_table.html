@@ -11,7 +11,12 @@
             {{ expense.amount }}
         </div>
         <div class="col-md-3">
-            <a href="{{ url_for('expense.expense_get_edit', id_=expense._id) }}" class="btn btn-primary">Edit</a>
+            <div class="col-md-6">
+                <a href="{{ url_for('expense.expense_get_edit', id_=expense._id) }}" class="btn btn-primary">Edit</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{{ url_for('expense.confirm_delete', id_=expense._id) }}" class="btn btn-danger">Delete</a>
+            </div>
         </div>
     </div>
 </div>
